@@ -489,25 +489,27 @@ Printer.prototype.qrimage = function (content, options, callback) {
  * @return {[Printer]} printer  [the escpos printer instance]
  */
 Printer.prototype.image = function (image, density) {
+  throw new Error('Image is not currently supported!!! Need to update the library at MyAccio/node-escpos')
   if (!(image instanceof Image))
     throw new TypeError('Only escpos.Image supported');
-  density = density || 'd24';
-  var n = !!~['d8', 's8'].indexOf(density) ? 1 : 3;
-  var header = _.BITMAP_FORMAT['BITMAP_' + density.toUpperCase()];
-  var bitmap = image.toBitmap(n * 8);
-  var self = this;
 
-  // added a delay so the printer can process the graphical data
-  // when connected via slower connection ( e.g.: Serial)
-  bitmap.data.forEach(async (line) => {
-    self.buffer.write(header);
-    self.buffer.writeUInt16LE(line.length / n);
-    self.buffer.write(line);
-    self.buffer.write(_.ESC + _.FEED_CONTROL_SEQUENCES.CTL_GLF);
-    await new Promise((resolve, reject) => {
-      setTimeout(() => { resolve(true) }, 200);
-    });
-  });
+  // density = density || 'd24';
+  // var n = !!~['d8', 's8'].indexOf(density) ? 1 : 3;
+  // var header = _.BITMAP_FORMAT['BITMAP_' + density.toUpperCase()];
+  // var bitmap = image.toBitmap(n * 8);
+  // var self = this;
+
+  // // added a delay so the printer can process the graphical data
+  // // when connected via slower connection ( e.g.: Serial)
+  // bitmap.data.forEach(async (line) => {
+  //   self.buffer.write(header);
+  //   self.buffer.writeUInt16LE(line.length / n);
+  //   self.buffer.write(line);
+  //   self.buffer.write(_.ESC + _.FEED_CONTROL_SEQUENCES.CTL_GLF);
+  //   await new Promise((resolve, reject) => {
+  //     setTimeout(() => { resolve(true) }, 200);
+  //   });
+  // });
 
   return this;
 };
